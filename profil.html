@@ -198,9 +198,10 @@ document.getElementById("skor").innerText = skor ? skor : "Belum mengerjakan kui
 
 // reset data
 function resetData(){
-  localStorage.clear();
-  alert("Data dihapus!");
-  location.reload();
+  if(confirm("Yakin ingin reset data?")){
+    localStorage.clear();
+    window.location.href = "index.html";
+  }
 }
 </script>
 
