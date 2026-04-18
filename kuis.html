@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Kuis P3K</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  background: #f4f4f4;
+}
+
+.header {
+  background: linear-gradient(135deg, #3a7bd5, #3a6073);
+  color: white;
+  padding: 20px;
+}
+
+.container {
+  padding: 15px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.option {
+  background: #eee;
+  padding: 12px;
+  border-radius: 12px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.option:hover {
+  background: #ddd;
+}
+
+.correct {
+  background: #a5d6a7 !important;
+}
+
+.wrong {
+  background: #ef9a9a !important;
+}
+
+.result {
+  text-align: center;
+}
+
+.btn-ulang {
+  margin-top: 20px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #ff7a18, #ffb347);
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.btn-ulang:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.btn-ulang:active {
+  transform: scale(0.95);
+}
+.back {
+  font-size: 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.back:hover {
+  opacity: 1;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <div class="back" onclick="history.back()">⬅️ Kembali</div>
+  <h2>✍️ Kuis P3K</h2>
+</div>
+  <p id="progress">Soal 1 / 10</p>
+</div>
+
+<div class="container">
+  <div class="card">
+    <h3 id="soal"></h3>
+    <div id="pilihan"></div>
+  </div>
+
+  <div class="card result" id="hasil" style="display:none;"></div>
+</div>
+
+<!-- SOUND -->
+<audio id="benarSound" src="benar.mp3"></audio>
+<audio id="salahSound" src="salah.mp3"></audio>
+
+<script>
+const quiz = [
+  { q: "Apa langkah pertama menangani mimisan?", o: ["Dongakkan kepala", "Tundukkan kepala & tekan hidung", "Masukkan tisu", "Minum air"], a: 1 },
+  { q: "Apa tujuan utama P3K?", o: ["Menyelamatkan nyawa", "Mengobati total", "Mengganti dokter", "Mendiagnosis penyakit"], a: 0 },
+  { q: "Apa yang dilakukan saat luka berdarah?", o: ["Dibiarkan", "Ditekan dengan kain bersih", "Ditiup", "Direndam air"], a: 1 },
+  { q: "Saat korban pingsan, yang pertama dilakukan?", o: ["Disiram air", "Diperiksa pernapasan", "Ditinggal", "Diberi makan"], a: 1 },
+  { q: "Apa fungsi antiseptik?", o: ["Menghangatkan", "Membunuh kuman", "Mengeringkan", "Mewarnai luka"], a: 1 },
+  { q: "Saat luka bakar ringan?", o: ["Oles minyak", "Dinginkan dengan air", "Digosok", "Ditutup rapat"], a: 1 },
+  { q: "Jika tersedak?", o: ["Minum air", "Tepuk punggung", "Tidur", "Diam saja"], a: 1 },
+  { q: "Peralatan P3K untuk menutup luka?", o: ["Plester", "Sendok", "Pensil", "Botol"], a: 0 },
+  { q: "Apa yang dilakukan sebelum membantu korban?", o: ["Ambil foto", "Pastikan lokasi aman", "Langsung pegang", "Panggil teman"], a: 1 },
+  { q: "Jika korban tidak bernapas?", o: ["Ditinggal", "CPR", "Minum air", "Tidur"], a: 1 }
+];
+
+let index = 0;
+let skor = 0;
+
+function loadSoal() {
+  document.getElementById("soal").innerText = quiz[index].q;
+  document.getElementById("progress").innerText = `Soal ${index+1} / ${quiz.length}`;
+
+  const pilihanDiv = document.getElementById("pilihan");
+  pilihanDiv.innerHTML = "";
+
+  // ambil pilihan + index asli
+  let options = quiz[index].o.map((opt, i) => ({
+    text: opt,
+    isCorrect: i === quiz[index].a
+  }));
+
+  // 🔀 acak jawaban
+  options.sort(() => Math.random() - 0.5);
+
+  options.forEach((opt) => {
+    const div = document.createElement("div");
+    div.classList.add("option");
+    div.innerText = opt.text;
+
+    div.onclick = () => {
+      document.querySelectorAll(".option").forEach(el => el.style.pointerEvents = "none");
+
+      const benarSound = document.getElementById("benarSound");
+      const salahSound = document.getElementById("salahSound");
+
+      if(opt.isCorrect){
+        div.classList.add("correct");
+        skor++;
+        benarSound.play();
+      } else {
+        div.classList.add("wrong");
+        salahSound.play();
+
+        // tandai yang benar
+        [...document.querySelectorAll(".option")].forEach(el => {
+          if(el.innerText === options.find(o => o.isCorrect).text){
+            el.classList.add("correct");
+          }
+        });
+      }
+
+      setTimeout(() => {
+        index++;
+
+        if(index < quiz.length){
+          loadSoal();
+        } else {
+        localStorage.setItem("skorKuis", skor + " / " + quiz.length);
+          document.querySelector(".card").style.display = "none";
+          document.getElementById("hasil").style.display = "block";
+          document.getElementById("hasil").innerHTML = `
+            <h2>🎉 Kuis Selesai!</h2>
+            <p>Skor kamu: <b>${skor} / ${quiz.length}</b></p>
+            <button class="btn-ulang" onclick="location.reload()">
+  🔄 Ulangi Kuis
+</button>
+          `;
+        }
+      }, 1000);
+    };
+
+    pilihanDiv.appendChild(div);
+  });
+}
+
+    
+loadSoal();
+</script>
+
+</body>
+</html>

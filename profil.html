@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Profil</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f5f5f5;
+}
+
+.header {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: white;
+  padding: 20px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+}
+
+.container {
+  padding: 15px;
+}
+
+.profile-card {
+  background: linear-gradient(135deg, #7b2ff7, #f107a3);
+  color: white;
+  padding: 20px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.avatar {
+  font-size: 40px;
+  background: rgba(255,255,255,0.2);
+  padding: 15px;
+  border-radius: 15px;
+}
+
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.icon {
+  font-size: 20px;
+}
+
+.label {
+  font-size: 13px;
+  color: #777;
+}
+
+.value {
+  font-weight: bold;
+}
+
+.btn-reset {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color: white;
+  font-weight: bold;
+  margin-top: 10px;
+  cursor: pointer;
+}
+.back {
+  font-size: 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.back:hover {
+  opacity: 1;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<div class="back" onclick="history.back()">⬅️ Kembali</div>
+  <h2>👤 Profil Saya</h2>
+  <p>Informasi akun & aplikasi</p>
+</div>
+
+<div class="container">
+
+  <div class="profile-card">
+    <div class="avatar">🎓</div>
+    <div>
+      <h3 id="nama"></h3>
+      <p>Mahasiswa PGSD 2026</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Informasi Akun</h4>
+
+    <div class="item">
+      <div class="icon">👤</div>
+      <div>
+        <div class="label">Nama Lengkap</div>
+        <div class="value" id="nama2"></div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="icon">🏫</div>
+      <div>
+        <div class="label">Program Studi</div>
+        <div class="value">PGSD - Universitas</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="icon">📅</div>
+      <div>
+        <div class="label">Semester</div>
+        <div class="value">Semester 2 - 2026</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="icon">🏆</div>
+      <div>
+        <div class="label">Skor Kuis Terakhir</div>
+        <div class="value" id="skor"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <h4>Tentang Aplikasi</h4>
+
+    <div class="item">
+      <div class="icon">📱</div>
+      <div>
+        <div class="label">Aplikasi</div>
+        <div class="value">SakuP3K v1.0</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="icon">👨‍💻</div>
+      <div>
+        <div class="label">Pengembang</div>
+        <div class="value">temen kikii</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="icon">📞</div>
+      <div>
+        <div class="label">Darurat</div>
+        <div class="value">119</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-reset" onclick="resetData()">🔄 Reset Data</button>
+
+</div>
+
+<script>
+// ambil nama dari login
+const nama = localStorage.getItem("namaUser") || "User";
+document.getElementById("nama").innerText = nama;
+document.getElementById("nama2").innerText = nama;
+
+// ambil skor kuis
+const skor = localStorage.getItem("skorKuis");
+document.getElementById("skor").innerText = skor ? skor : "Belum mengerjakan kuis";
+
+// reset data
+function resetData(){
+  localStorage.clear();
+  alert("Data dihapus!");
+  location.reload();
+}
+</script>
+
+</body>
+</html>
